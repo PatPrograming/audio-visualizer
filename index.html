@@ -49,10 +49,13 @@
 
         source.connect(analyser);
         analyser.connect(audioCtx.destination);
-        analyser.fftSize = 256;
+        analyser.fftSize = 512; // Increased FFT size for better resolution
 
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
+
+        // Apply a smoothing factor for the waveform
+        const smoothingFactor = 0.2;
 
         function drawWaveform() {
             requestAnimationFrame(drawWaveform);
@@ -66,15 +69,26 @@
             let sliceWidth = canvas.width / bufferLength;
             let x = 0;
 
+            // Scale up the wave height by a factor (e.g., 1.5) for more visible waves
+            const amplitudeScale = 1.5;
+
+            // Smooth the waveform data by averaging over neighboring values
+            let smoothedData = new Uint8Array(bufferLength);
+            smoothedData[0] = dataArray[0];  // Start with the first value
+            for (let i = 1; i < bufferLength; i++) {
+                smoothedData[i] = smoothingFactor * dataArray[i] + (1 - smoothingFactor) * smoothedData[i - 1];
+            }
+
             for (let i = 0; i < bufferLength; i++) {
-                let v = dataArray[i] / 128.0;
-                let y = v * canvas.height / 2;
+                let v = (smoothedData[i] - 128.0) / 128.0; // Normalize to -1 to 1
+                let y = v * canvas.height / 2 * amplitudeScale + canvas.height / 2; // Adjust the scaling factor here for more wavey effect
 
                 if (i === 0) {
                     ctx.moveTo(x, y);
                 } else {
                     ctx.lineTo(x, y);
                 }
+
                 x += sliceWidth;
             }
 
@@ -91,3 +105,4 @@
 
 </body>
 </html>
+
