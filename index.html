@@ -76,8 +76,8 @@
             let sliceWidth = canvas.width / bufferLength;
             let x = 0;
 
-            // Scale up the wave height by a larger factor for exaggerated waves
-            const amplitudeScale = 5; // Increased for more dramatic wave
+            // Scale up the wave height by a factor (e.g., 1.5) for more visible waves
+            const amplitudeScale = 1.5;
 
             // Smooth the waveform data by averaging over neighboring values
             let smoothedData = new Uint8Array(bufferLength);
@@ -86,10 +86,9 @@
                 smoothedData[i] = smoothingFactor * dataArray[i] + (1 - smoothingFactor) * smoothedData[i - 1];
             }
 
-            // Loop through data array and create the waveform path
             for (let i = 0; i < bufferLength; i++) {
                 let v = (smoothedData[i] - 128.0) / 128.0; // Normalize to -1 to 1
-                let y = v * canvas.height / 2 * amplitudeScale + canvas.height / 2; // Apply larger scaling factor here
+                let y = v * canvas.height / 2 * amplitudeScale + canvas.height / 2; // Adjust the scaling factor here for more wavey effect
 
                 if (i === 0) {
                     ctx.moveTo(x, y);
@@ -113,3 +112,4 @@
 
 </body>
 </html>
+
