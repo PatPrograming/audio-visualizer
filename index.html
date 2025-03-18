@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Wavelength Visualizer</title>
     <style>
+        /* Body takes up full viewport, centered content */
         body {
             display: flex;
             flex-direction: column;
@@ -14,13 +15,19 @@
             background-color: #121212;
             color: white;
             font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevents overflow */
+            margin: 0; /* Removes any default body margin */
         }
+
+        /* Canvas style */
         canvas {
-            width: 80%;
-            height: 200px;
+            max-width: 100%; /* Ensures canvas width does not exceed viewport */
+            height: auto;    /* Maintain aspect ratio */
             background: black;
             border-radius: 10px;
         }
+
+        /* Audio control style */
         audio {
             margin-top: 20px;
         }
@@ -30,7 +37,6 @@
 
     <canvas id="waveCanvas"></canvas>
     <audio id="audio" controls>
-        <!-- Link to your MP3 file in the repository -->
         <source src="COMM%203%20Audio%20-%20Will%20and%20Patrick.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -40,6 +46,7 @@
         const ctx = canvas.getContext("2d");
         const audio = document.getElementById("audio");
 
+        // Set canvas size relative to the viewport width
         canvas.width = window.innerWidth * 0.8;
         canvas.height = 200;
 
