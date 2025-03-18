@@ -5,25 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Wavelength Visualizer</title>
     <style>
-        /* Body takes up full viewport, centered content */
-        body {
+        /* Make the entire page background transparent */
+        html, body {
+            background: transparent;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #121212;
             color: white;
             font-family: Arial, sans-serif;
             margin: 0; /* Removes any default body margin */
-            overflow: hidden; /* Prevents overflow */
+            overflow: hidden; /* Prevents scrolling issues */
         }
 
         /* Canvas style */
         canvas {
-            width: 100%; /* Ensures canvas width does not exceed viewport */
-            height: auto;    /* Maintain aspect ratio */
-            background: black;
+            width: 100%;
+            height: auto;
+            background: black; /* Keeps the waveform background */
             border-radius: 10px;
         }
 
@@ -76,8 +76,8 @@
             let sliceWidth = canvas.width / bufferLength;
             let x = 0;
 
-            // Scale up the wave height by a factor (e.g., 1.5) for more visible waves
-            const amplitudeScale = 1.5;
+            // Scale up the wave height by a factor (e.g., 2) for more exaggerated waves
+            const amplitudeScale = 2;
 
             // Smooth the waveform data by averaging over neighboring values
             let smoothedData = new Uint8Array(bufferLength);
@@ -88,7 +88,7 @@
 
             for (let i = 0; i < bufferLength; i++) {
                 let v = (smoothedData[i] - 128.0) / 128.0; // Normalize to -1 to 1
-                let y = v * canvas.height / 2 * amplitudeScale + canvas.height / 2; // Adjust the scaling factor here for more wavey effect
+                let y = v * canvas.height / 2 * amplitudeScale + canvas.height / 2; // More wavey effect
 
                 if (i === 0) {
                     ctx.moveTo(x, y);
